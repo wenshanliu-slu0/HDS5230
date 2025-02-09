@@ -1,0 +1,216 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+#### Week3-Assignment
+#### Author: Wen-shan, Liu
+#### Date: 2025-02-08
+
+
+```{r}
+
+file_path <- "clinics.csv" 
+df <- read.csv(file_path, header = TRUE, sep = "|")
+
+head(df)
+```
+
+```{r}
+
+df$locLat <- as.numeric(df$locLat)
+df$locLong <- as.numeric(df$locLong)
+
+# Remove NA
+df_coords <- df[, c("locLat", "locLong")]
+df_coords <- na.omit(df_coords)
+
+head(df_coords)
+```
+
+
+
+```{r}
+
+# Haversine Distance Function
+haversine <- function(lat1, lon1, lat2, lon2) {
+  
+  MILES <- 3959
+  
+  
+  lat1 <- lat1 * pi / 180
+  lon1 <- lon1 * pi / 180
+  lat2 <- lat2 * pi / 180
+  lon2 <- lon2 * pi / 180
+  
+ 
+  dlat <- lat2 - lat1
+  dlon <- lon2 - lon1
+  
+  # Haversine function
+  a <- sin(dlat/2)^2 + cos(lat1) * cos(lat2) * sin(dlon/2)^2
+  c <- 2 * asin(sqrt(a))
+  
+  # Distance 
+  distance <- MILES * c
+  return(distance)
+}
+
+
+
+```
+
+
+```{r}
+
+# For-loop to calc the distance
+haversine_looping_all <- function(df) {
+  n <- nrow(df)
+  distance_matrix <- matrix(0, nrow = n, ncol = n)
+  
+  for(i in 1:n) {
+    for(j in i:n) {  #
+      if (i != j) {  # to avoid to calc the distance of the same point 
+        d <- haversine(
+          df$locLat[i], df$locLong[i],
+          df$locLat[j], df$locLong[j]
+        )
+        distance_matrix[i,j] <- d
+        distance_matrix[j,i] <- d  
+      }
+    }
+  }
+  
+  return(distance_matrix)
+}
+
+
+# 1. For-loop
+start_time <- Sys.time()
+distances_loop <- haversine_looping_all(df_coords)
+end_time <- Sys.time()
+time_loop <- as.numeric(end_time - start_time, units = "secs")
+
+# Result
+print("Execution Times -For loop)：")
+print(time_loop)
+```
+```{r}
+#Method2: Iterrow method
+
+library(dplyr)
+library(tidyr)
+# 
+# distances_rowwise <- df_coords %>%
+#   rowwise() %>%
+#   mutate(
+#     distances = list(
+#       sapply(1:nrow(df_coords), function(j) {
+#         haversine(
+#           locLat, locLong,
+#           df_coords$locLat[j], df_coords$locLong[j]
+#         )
+#       })
+#     )
+#   ) %>%
+#   pull(distances) %>%
+#   do.call(rbind, .)
+
+
+calculate_distances_rowwise <- function(df_coords) {
+ 
+  distances_rowwise <- df_coords %>%
+    rowwise() %>%
+    mutate(
+      distances = list(
+        sapply(1:nrow(df_coords), function(j) {
+          haversine(
+            locLat, locLong,
+            df_coords$locLat[j], df_coords$locLong[j]
+          )
+        })
+      )
+    ) %>%
+    pull(distances) %>%
+    do.call(rbind, .) 
+  
+  return(distances_rowwise)
+}
+
+
+start_time <- Sys.time()
+distances_result <- calculate_distances_rowwise(df_coords)
+end_time <- Sys.time()
+time_rowwise <- as.numeric(end_time - start_time, units = "secs")
+
+print("Execution Times -Iterrow：")
+print(time_rowwise)
+
+
+```
+
+```{r}
+# 2. Apply方法
+
+
+# distances_apply <- outer(
+#   1:nrow(df_coords),
+#   1:nrow(df_coords),
+#   FUN = Vectorize(function(i, j) {
+#     haversine(
+#       df_coords$locLat[i], df_coords$locLong[i],
+#       df_coords$locLat[j], df_coords$locLong[j]
+#     )
+#   })
+# )
+
+calculate_distances_apply <- function(df_coords) {
+  # using outer and  Vectorize to calculte distance
+  distances_apply <- outer(
+    1:nrow(df_coords),
+    1:nrow(df_coords),
+    FUN = Vectorize(function(i, j) {
+      haversine(
+        df_coords$locLat[i], df_coords$locLong[i],
+        df_coords$locLat[j], df_coords$locLong[j]
+      )
+    })
+  )
+  
+  return(distances_apply)
+}
+
+start_time <- Sys.time()
+distances_apply<- calculate_distances_apply(df_coords)
+end_time <- Sys.time()
+time_apply <- as.numeric(end_time - start_time, units = "secs")
+print("Execution Times -Apply：")
+print(time_apply)
+
+```
+
+
+
+
+```{r}
+library(knitr)
+library(kableExtra)
+
+# Create a Table 
+df <- data.frame(
+  Method = c("For-loop", "Iterrow", "Apply"),
+  Time_sec = c(time_loop, time_rowwise, time_apply)  
+)
+
+# theme table
+df %>%
+  kbl(caption = "Performance Comparison of Different Methods by usnig R") %>%
+  kable_styling()
+
+
+```
+
+
+
+
+
