@@ -1,0 +1,569 @@
+---
+title: "Ｗeek11_caret_xgboost"
+author: "Wenshan, Liu"
+date: "2025-04-26"
+output: html_document
+---
+
+
+```{r}
+#install.packages("caret")
+
+```
+
+
+
+```{r}
+
+#Load the libries
+library(caret)
+library(xgboost)
+
+# load dataset (dataset = 100)
+df1 <- read.csv("dataset/100_.csv")
+
+dim(df1) 
+
+```
+```{r}
+set.seed(42)
+sample_index <- sample(1:nrow(df1), size = 0.8 * nrow(df1))
+train_data <- df1[sample_index, ]
+test_data  <- df1[-sample_index, ]
+
+
+# X
+train_X <- train_data[, !(names(train_data) %in% "outcome")]
+test_X  <- test_data[, !(names(test_data) %in% "outcome")]
+
+# y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+# caret 
+#caret need y as the factor (so, we have to change 0/1 --> no/yes)
+train_X <- train_data[, !(names(train_data) %in% "outcome")]
+train_y_factor <- factor(train_y, levels = c(0, 1), labels = c("no", "yes"))
+
+test_X <- test_data[, !(names(test_data) %in% "outcome")]
+test_y_factor  <- factor(test_y, levels = c(0, 1), labels = c("no", "yes"))
+
+
+dim(train_X)              # check shape
+length(train_y_factor)   
+```
+
+```{r}
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+tune_grid <- expand.grid(
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+start_time <- Sys.time()
+caret_model <- train(
+  x = train_X,
+  y = train_y_factor,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = tune_grid,
+  metric = "ROC",
+  verbose = 0
+)
+end_time <- Sys.time()
+fit_time <- end_time - start_time
+
+# test
+caret_pred <- predict(caret_model, test_X)
+conf_mat <- confusionMatrix(caret_pred, test_y_factor)
+
+cat(" [caret] Results\n")
+cat("start_time:", start_time, "\n")
+cat("end_time:", end_time, "\n")
+cat("Testing Accuracy Rate:", round(conf_mat$overall["Accuracy"], 4), "\n")
+cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+
+
+```
+
+#------------------------
+
+
+
+
+```{r}
+
+#Load the libries
+library(caret)
+library(xgboost)
+
+# load dataset  (dataset = 1000)
+df2 <- read.csv("dataset/1000_.csv")
+
+dim(df2) 
+
+```
+
+```{r}
+set.seed(42)
+sample_index <- sample(1:nrow(df2), size = 0.8 * nrow(df2))
+train_data2 <- df2[sample_index, ]
+test_data2  <- df2[-sample_index, ]
+
+
+# X
+train_X2 <- train_data2[, !(names(train_data2) %in% "outcome")]
+test_X2  <- test_data2[, !(names(test_data2) %in% "outcome")]
+
+# y
+train_y2 <- train_data2$outcome
+test_y2  <- test_data2$outcome
+
+# caret 
+#caret need y as the factor (so, we have to change 0/1 --> no/yes)
+train_X2 <- train_data2[, !(names(train_data2) %in% "outcome")]
+train_y_factor2 <- factor(train_y2, levels = c(0, 1), labels = c("no", "yes"))
+
+test_X2<- test_data[, !(names(test_data) %in% "outcome")]
+test_y_factor2  <- factor(test_y2, levels = c(0, 1), labels = c("no", "yes"))
+
+
+
+dim(train_X2)              
+length(train_y_factor2)    
+```
+
+```{r}
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+tune_grid <- expand.grid(
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+start_time <- Sys.time()
+caret_model <- train(
+  x = train_X,
+  y = train_y_factor,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = tune_grid,
+  metric = "ROC",
+  verbose = 0
+)
+end_time <- Sys.time()
+fit_time <- end_time - start_time
+
+
+caret_pred <- predict(caret_model, test_X)
+conf_mat <- confusionMatrix(caret_pred, test_y_factor)
+
+cat(" [caret] Results\n")
+cat("start_time:", start_time, "\n")
+cat("end_time:", end_time, "\n")
+cat("Testing Accuracy Rate:", round(conf_mat$overall["Accuracy"], 4), "\n")
+cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+
+
+```
+
+#------------------
+
+
+
+
+
+
+```{r}
+
+#Load the libries
+library(caret)
+library(xgboost)
+
+# load dataset (dataset =10000)
+df3 <- read.csv("dataset/10000_.csv")
+
+dim(df3) 
+
+```
+
+```{r}
+set.seed(42)
+sample_index <- sample(1:nrow(df3), size = 0.8 * nrow(df3))
+train_data3 <- df3[sample_index, ]
+test_data3  <- df3[-sample_index, ]
+
+
+# X
+train_X3 <- train_data3[, !(names(train_data3) %in% "outcome")]
+test_X3  <- test_data3[, !(names(test_data3) %in% "outcome")]
+
+# y
+train_y3 <- train_data3$outcome
+test_y3  <- test_data3$outcome
+
+# caret 
+#caret need y as the factor (so, we have to change 0/1 --> no/yes)
+train_X3 <- train_data3[, !(names(train_data3) %in% "outcome")]
+train_y_factor3 <- factor(train_y3, levels = c(0, 1), labels = c("no", "yes"))
+
+test_X3 <- test_data3[, !(names(test_data3) %in% "outcome")]
+test_y_factor3  <- factor(test_y3, levels = c(0, 1), labels = c("no", "yes"))
+
+
+
+dim(train_X3)              
+length(train_y_factor3)    
+```
+
+```{r}
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+tune_grid <- expand.grid(
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+start_time <- Sys.time()
+caret_model <- train(
+  x = train_X3,
+  y = train_y_factor3,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = tune_grid,
+  metric = "ROC",
+  verbose = 0
+)
+end_time <- Sys.time()
+fit_time <- end_time - start_time
+
+#
+caret_pred <- predict(caret_model, test_X3)
+conf_mat <- confusionMatrix(caret_pred, test_y_factor3)
+
+cat(" [caret] Results\n")
+cat("start_time:", start_time, "\n")
+cat("end_time:", end_time, "\n")
+cat("Testing Accuracy Rate:", round(conf_mat$overall["Accuracy"], 4), "\n")
+cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+
+
+```
+
+#-------------------
+#------
+
+
+
+
+
+```{r}
+
+#Load the libries
+library(caret)
+library(xgboost)
+
+# load dataset (dataset = 100000)
+df4 <- read.csv("dataset/100000_.csv")
+
+dim(df4) 
+
+```
+
+```{r}
+set.seed(42)
+sample_index <- sample(1:nrow(df4), size = 0.8 * nrow(df4))
+train_data4 <- df4[sample_index, ]
+test_data4  <- df4[-sample_index, ]
+
+
+# X
+train_X4 <- train_data4[, !(names(train_data4) %in% "outcome")]
+test_X4  <- test_data4[, !(names(test_data4) %in% "outcome")]
+
+# y
+train_y4 <- train_data4$outcome
+test_y4  <- test_data4$outcome
+
+# caret 
+#caret need y as the factor (so, we have to change 0/1 --> no/yes)
+train_X4 <- train_data4[, !(names(train_data4) %in% "outcome")]
+train_y_factor4 <- factor(train_y4, levels = c(0, 1), labels = c("no", "yes"))
+
+test_X4 <- test_data4[, !(names(test_data4) %in% "outcome")]
+test_y_factor4  <- factor(test_y4, levels = c(0, 1), labels = c("no", "yes"))
+
+
+
+dim(train_X4)              
+length(train_y_factor4)   
+```
+
+```{r}
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+tune_grid <- expand.grid(
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+start_time <- Sys.time()
+caret_model <- train(
+  x = train_X4,
+  y = train_y_factor4,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = tune_grid,
+  metric = "ROC",
+  verbose = 0
+)
+end_time <- Sys.time()
+fit_time <- end_time - start_time
+
+
+caret_pred <- predict(caret_model, test_X4)
+conf_mat <- confusionMatrix(caret_pred, test_y_factor4)
+
+cat(" [caret] Results\n")
+cat("start_time:", start_time, "\n")
+cat("end_time:", end_time, "\n")
+cat("Testing Accuracy Rate:", round(conf_mat$overall["Accuracy"], 4), "\n")
+cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+
+
+```
+
+
+
+
+
+#-----------------
+
+
+
+
+```{r}
+
+#Load the libries
+library(caret)
+library(xgboost)
+
+# load dataset (dataset = 1000000)
+df5 <- read.csv("dataset/1000000_.csv")
+
+dim(df5) 
+
+```
+
+```{r}
+set.seed(42)
+sample_index <- sample(1:nrow(df5), size = 0.8 * nrow(df5))
+train_data5 <- df5[sample_index, ]
+test_data5  <- df5[-sample_index, ]
+
+
+# X
+train_X5 <- train_data5[, !(names(train_data5) %in% "outcome")]
+test_X5  <- test_data5[, !(names(test_data5) %in% "outcome")]
+
+# y
+train_y5 <- train_data5$outcome
+test_y5  <- test_data5$outcome
+
+# caret 
+#caret need y as the factor (so, we have to change 0/1 --> no/yes)
+train_X5 <- train_data5[, !(names(train_data5) %in% "outcome")]
+train_y_factor5 <- factor(train_y5, levels = c(0, 1), labels = c("no", "yes"))
+
+test_X5 <- test_data5[, !(names(test_data5) %in% "outcome")]
+test_y_factor5  <- factor(test_y5, levels = c(0, 1), labels = c("no", "yes"))
+
+
+
+dim(train_X5)              
+length(train_y_factor5)    
+```
+
+```{r}
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+tune_grid <- expand.grid(
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+start_time <- Sys.time()
+caret_model <- train(
+  x = train_X5,
+  y = train_y_factor5,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = tune_grid,
+  metric = "ROC",
+  verbose = 0
+)
+end_time <- Sys.time()
+fit_time <- end_time - start_time
+
+
+caret_pred <- predict(caret_model, test_X5)
+conf_mat <- confusionMatrix(caret_pred, test_y_factor5)
+
+cat(" [caret] Results\n")
+cat("start_time:", start_time, "\n")
+cat("end_time:", end_time, "\n")
+cat("Testing Accuracy Rate:", round(conf_mat$overall["Accuracy"], 4), "\n")
+cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+
+
+```
+
+
+#--------------------------
+
+
+
+
+```{r}
+
+#Load the libries
+library(caret)
+library(xgboost)
+
+# load dataset (dataset = 10000000)
+df6 <- read.csv("dataset/10000000_.csv")
+
+dim(df6) 
+
+```
+
+```{r}
+set.seed(42)
+sample_index <- sample(1:nrow(df6), size = 0.8 * nrow(df6))
+train_data6 <- df6[sample_index, ]
+test_data6  <- df6[-sample_index, ]
+
+
+# X
+train_X6 <- train_data6[, !(names(train_data6) %in% "outcome")]
+test_X6  <- test_data6[, !(names(test_data6) %in% "outcome")]
+
+# y
+train_y6 <- train_data6$outcome
+test_y6  <- test_data6$outcome
+
+# caret 
+#caret need y as the factor (so, we have to change 0/1 --> no/yes)
+train_X6 <- train_data6[, !(names(train_data6) %in% "outcome")]
+train_y_factor6 <- factor(train_y6, levels = c(0, 1), labels = c("no", "yes"))
+
+test_X6 <- test_data6[, !(names(test_data6) %in% "outcome")]
+test_y_factor6  <- factor(test_y6, levels = c(0, 1), labels = c("no", "yes"))
+
+
+
+dim(train_X6)              # 
+length(train_y_factor6)    # 
+```
+
+```{r}
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary
+)
+
+tune_grid <- expand.grid(
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+start_time <- Sys.time()
+caret_model <- train(
+  x = train_X6,
+  y = train_y_factor6,
+  method = "xgbTree",
+  trControl = ctrl,
+  tuneGrid = tune_grid,
+  metric = "ROC",
+  verbose = 0
+)
+end_time <- Sys.time()
+fit_time <- end_time - start_time
+
+
+caret_pred <- predict(caret_model, test_X6)
+conf_mat <- confusionMatrix(caret_pred, test_y_factor6)
+
+cat(" [caret] Results\n")
+cat("start_time:", start_time, "\n")
+cat("end_time:", end_time, "\n")
+cat("Testing Accuracy Rate:", round(conf_mat$overall["Accuracy"], 4), "\n")
+cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+
+
+```
+
+
