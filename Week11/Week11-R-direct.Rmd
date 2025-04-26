@@ -1,0 +1,628 @@
+---
+title: "Ｗeek11_direct_xgboost"
+author: "Wenshan, Liu"
+date: "2025-04-18"
+output: html_document
+---
+
+##### XGBoost in R – direct use of xgboost() with simple cross-validation
+```{r}
+#load the data
+df1 <- read.csv("dataset/100_.csv")
+dim(df1) 
+
+```
+
+```{r}
+
+#install.packages("xgboost")
+```
+
+
+```{r}
+library(xgboost)
+# split the data
+set.seed(42)  #set seed
+
+sample_index <- sample(1:nrow(df1), size = 0.8 * nrow(df1))
+
+train_data <- df1[sample_index, ]       # 0.8 for training 
+test_data  <- df1[-sample_index, ]      # 0.2 for testing
+
+#Define X
+train_X <- as.matrix(train_data[, !(names(train_data) %in% "outcome")])
+test_X  <- as.matrix(test_data[, !(names(test_data) %in% "outcome")])
+
+#Define Y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+
+# DMatrix 
+dtrain <- xgb.DMatrix(data = train_X, label = train_y)
+dtest  <- xgb.DMatrix(data = test_X, label = test_y)
+
+params <- list(
+  objective = "binary:logistic",
+  eval_metric = "error"
+)
+```
+
+
+
+
+
+```{r}
+
+# xg_boost() 
+run_xgboost_cv <- function(params, dtrain, dtest, test_y, nfold = 5, max_rounds = 100, early_stopping = 10) {
+  
+  # Step 1: Cross-validation to find best nrounds
+  cv_model <- xgb.cv(
+    params = params,
+    data = dtrain,
+    nrounds = max_rounds,
+    nfold = nfold,
+    early_stopping_rounds = early_stopping,
+    verbose = 0
+  )
+  
+  best_nrounds <- cv_model$best_iteration
+  
+  # Step 2: Train final model
+  start_time <- Sys.time()
+  
+  final_model <- xgboost(
+    params = params,
+    data = dtrain,
+    nrounds = best_nrounds,
+    verbose = 0
+  )
+  
+  # time up  
+  end_time <- Sys.time()
+  fit_time <- end_time - start_time
+  
+  
+
+  # Step 3: Predict on test set
+  test_pred <- predict(final_model, dtest)
+  test_pred_label <- ifelse(test_pred > 0.5, 1, 0)
+  
+  test_error <- mean(test_pred_label != test_y)
+  test_accuracy <- 1 - test_error
+  
+  
+
+  
+  # Step 4: Print results
+  cat("start_time",start_time,"\n")
+  cat("end_time",end_time, "\n")
+  cat("Testing Error Rate:", round(test_error, 4), "\n")
+  cat("Testing Accuracy Rate:", round(test_accuracy, 4), "\n")
+  cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+  
+}
+
+# run the code
+result <- run_xgboost_cv(params, dtrain, dtest, test_y)
+
+
+```
+
+
+
+
+
+
+####----------------------------------
+
+
+
+```{r}
+#load the data
+df2 <- read.csv("dataset/1000_.csv")
+dim(df2) 
+
+```
+
+
+```{r}
+library(xgboost)
+# split the data
+set.seed(42)  #set seed
+
+sample_index <- sample(1:nrow(df2), size = 0.8 * nrow(df2))
+
+train_data <- df2[sample_index, ]       # 0.8 for training 
+test_data  <- df2[-sample_index, ]      # 0.2 for testing
+
+#Define X
+train_X <- as.matrix(train_data[, !(names(train_data) %in% "outcome")])
+test_X  <- as.matrix(test_data[, !(names(test_data) %in% "outcome")])
+
+#Define Y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+
+# DMatrix 
+dtrain <- xgb.DMatrix(data = train_X, label = train_y)
+dtest  <- xgb.DMatrix(data = test_X, label = test_y)
+
+params <- list(
+  objective = "binary:logistic",
+  eval_metric = "error"
+)
+```
+
+
+
+
+
+```{r}
+
+# xg_boost() 
+run_xgboost_cv <- function(params, dtrain, dtest, test_y, nfold = 5, max_rounds = 100, early_stopping = 10) {
+  
+  # Step 1: Cross-validation to find best nrounds
+  cv_model <- xgb.cv(
+    params = params,
+    data = dtrain,
+    nrounds = max_rounds,
+    nfold = nfold,
+    early_stopping_rounds = early_stopping,
+    verbose = 0
+  )
+  
+  best_nrounds <- cv_model$best_iteration
+  
+  # Step 2: Train final model
+  start_time <- Sys.time()
+  
+  final_model <- xgboost(
+    params = params,
+    data = dtrain,
+    nrounds = best_nrounds,
+    verbose = 0
+  )
+  
+  # time up  
+  end_time <- Sys.time()
+  fit_time <- end_time - start_time
+  
+  
+
+  # Step 3: Predict on test set
+  test_pred <- predict(final_model, dtest)
+  test_pred_label <- ifelse(test_pred > 0.5, 1, 0)
+  
+  test_error <- mean(test_pred_label != test_y)
+  test_accuracy <- 1 - test_error
+  
+  
+
+  
+  # Step 4: Print results
+  cat("start_time",start_time,"\n")
+  cat("end_time",end_time, "\n")
+  cat("Testing Error Rate:", round(test_error, 4), "\n")
+  cat("Testing Accuracy Rate:", round(test_accuracy, 4), "\n")
+  cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+  
+}
+
+# run the code
+result <- run_xgboost_cv(params, dtrain, dtest, test_y)
+
+
+```
+
+
+####----------------------------------
+
+```{r}
+#load the data
+df3 <- read.csv("dataset/10000_.csv")
+dim(df3) 
+
+```
+
+
+
+
+```{r}
+library(xgboost)
+# split the data
+set.seed(42)  #set seed
+
+sample_index <- sample(1:nrow(df3), size = 0.8 * nrow(df3))
+
+train_data <- df3[sample_index, ]       # 0.8 for training 
+test_data  <- df3[-sample_index, ]      # 0.2 for testing
+
+#Define X
+train_X <- as.matrix(train_data[, !(names(train_data) %in% "outcome")])
+test_X  <- as.matrix(test_data[, !(names(test_data) %in% "outcome")])
+
+#Define Y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+
+# DMatrix 
+dtrain <- xgb.DMatrix(data = train_X, label = train_y)
+dtest  <- xgb.DMatrix(data = test_X, label = test_y)
+
+params <- list(
+  objective = "binary:logistic",
+  eval_metric = "error"
+)
+```
+
+
+
+
+```{r}
+
+# xg_boost() 
+run_xgboost_cv <- function(params, dtrain, dtest, test_y, nfold = 5, max_rounds = 100, early_stopping = 10) {
+  
+  # Step 1: Cross-validation to find best nrounds
+  cv_model <- xgb.cv(
+    params = params,
+    data = dtrain,
+    nrounds = max_rounds,
+    nfold = nfold,
+    early_stopping_rounds = early_stopping,
+    verbose = 0
+  )
+  
+  best_nrounds <- cv_model$best_iteration
+  
+  # Step 2: Train final model
+  start_time <- Sys.time()
+  
+  final_model <- xgboost(
+    params = params,
+    data = dtrain,
+    nrounds = best_nrounds,
+    verbose = 0
+  )
+  
+  # time up  
+  end_time <- Sys.time()
+  fit_time <- end_time - start_time
+  
+  
+
+  # Step 3: Predict on test set
+  test_pred <- predict(final_model, dtest)
+  test_pred_label <- ifelse(test_pred > 0.5, 1, 0)
+  
+  test_error <- mean(test_pred_label != test_y)
+  test_accuracy <- 1 - test_error
+  
+  
+
+  
+  # Step 4: Print results
+  cat("start_time",start_time,"\n")
+  cat("end_time",end_time, "\n")
+  cat("Testing Error Rate:", round(test_error, 4), "\n")
+  cat("Testing Accuracy Rate:", round(test_accuracy, 4), "\n")
+  cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+  
+}
+
+# run the code
+result <- run_xgboost_cv(params, dtrain, dtest, test_y)
+
+
+
+```
+
+
+#------------------------
+
+```{r}
+#load the data
+df4 <- read.csv("dataset/100000_.csv")
+dim(df4) 
+
+```
+
+
+```{r}
+library(xgboost)
+# split the data
+set.seed(42)  #set seed
+
+sample_index <- sample(1:nrow(df4), size = 0.8 * nrow(df4))
+
+train_data <- df4[sample_index, ]       # 0.8 for training 
+test_data  <- df4[-sample_index, ]      # 0.2 for testing
+
+#Define X
+train_X <- as.matrix(train_data[, !(names(train_data) %in% "outcome")])
+test_X  <- as.matrix(test_data[, !(names(test_data) %in% "outcome")])
+
+#Define Y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+
+# DMatrix 
+dtrain <- xgb.DMatrix(data = train_X, label = train_y)
+dtest  <- xgb.DMatrix(data = test_X, label = test_y)
+
+params <- list(
+  objective = "binary:logistic",
+  eval_metric = "error"
+)
+```
+
+
+
+
+
+```{r}
+
+# xg_boost() 
+run_xgboost_cv <- function(params, dtrain, dtest, test_y, nfold = 5, max_rounds = 100, early_stopping = 10) {
+  
+  # Step 1: Cross-validation to find best nrounds
+  cv_model <- xgb.cv(
+    params = params,
+    data = dtrain,
+    nrounds = max_rounds,
+    nfold = nfold,
+    early_stopping_rounds = early_stopping,
+    verbose = 0
+  )
+  
+  best_nrounds <- cv_model$best_iteration
+  
+  # Step 2: Train final model
+  start_time <- Sys.time()
+  
+  final_model <- xgboost(
+    params = params,
+    data = dtrain,
+    nrounds = best_nrounds,
+    verbose = 0
+  )
+  
+  # time up  
+  end_time <- Sys.time()
+  fit_time <- end_time - start_time
+  
+  
+
+  # Step 3: Predict on test set
+  test_pred <- predict(final_model, dtest)
+  test_pred_label <- ifelse(test_pred > 0.5, 1, 0)
+  
+  test_error <- mean(test_pred_label != test_y)
+  test_accuracy <- 1 - test_error
+  
+  
+
+  
+  # Step 4: Print results
+  cat("start_time",start_time,"\n")
+  cat("end_time",end_time, "\n")
+  cat("Testing Error Rate:", round(test_error, 4), "\n")
+  cat("Testing Accuracy Rate:", round(test_accuracy, 4), "\n")
+  cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+  
+}
+
+# run the code
+result <- run_xgboost_cv(params, dtrain, dtest, test_y)
+
+
+```
+
+
+
+#---------
+
+
+```{r}
+#load the data
+df5 <- read.csv("dataset/1000000_.csv")
+dim(df5) 
+
+```
+
+
+
+
+```{r}
+library(xgboost)
+# split the data
+set.seed(42)  #set seed
+
+sample_index <- sample(1:nrow(df5), size = 0.8 * nrow(df5))
+
+train_data <- df5[sample_index, ]       # 0.8 for training 
+test_data  <- df5[-sample_index, ]      # 0.2 for testing
+
+#Define X
+train_X <- as.matrix(train_data[, !(names(train_data) %in% "outcome")])
+test_X  <- as.matrix(test_data[, !(names(test_data) %in% "outcome")])
+
+#Define Y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+
+# DMatrix 
+dtrain <- xgb.DMatrix(data = train_X, label = train_y)
+dtest  <- xgb.DMatrix(data = test_X, label = test_y)
+
+params <- list(
+  objective = "binary:logistic",
+  eval_metric = "error"
+)
+```
+
+
+
+```{r}
+
+# xg_boost() 
+run_xgboost_cv <- function(params, dtrain, dtest, test_y, nfold = 5, max_rounds = 100, early_stopping = 10) {
+  
+  # Step 1: Cross-validation to find best nrounds
+  cv_model <- xgb.cv(
+    params = params,
+    data = dtrain,
+    nrounds = max_rounds,
+    nfold = nfold,
+    early_stopping_rounds = early_stopping,
+    verbose = 0
+  )
+  
+  best_nrounds <- cv_model$best_iteration
+  
+  # Step 2: Train final model
+  start_time <- Sys.time()
+  
+  final_model <- xgboost(
+    params = params,
+    data = dtrain,
+    nrounds = best_nrounds,
+    verbose = 0
+  )
+  
+  # time up  
+  end_time <- Sys.time()
+  fit_time <- end_time - start_time
+  
+  
+
+  # Step 3: Predict on test set
+  test_pred <- predict(final_model, dtest)
+  test_pred_label <- ifelse(test_pred > 0.5, 1, 0)
+  
+  test_error <- mean(test_pred_label != test_y)
+  test_accuracy <- 1 - test_error
+  
+  
+
+  
+  # Step 4: Print results
+  cat("start_time",start_time,"\n")
+  cat("end_time",end_time, "\n")
+  cat("Testing Error Rate:", round(test_error, 4), "\n")
+  cat("Testing Accuracy Rate:", round(test_accuracy, 4), "\n")
+  cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+  
+}
+
+# run the code
+result <- run_xgboost_cv(params, dtrain, dtest, test_y)
+
+
+```
+
+
+
+#-----------------
+
+```{r}
+#load the data
+df6 <- read.csv("dataset/10000000_.csv")
+dim(df6) 
+
+```
+
+
+
+```{r}
+library(xgboost)
+# split the data
+set.seed(42)  #set seed
+
+sample_index <- sample(1:nrow(df6), size = 0.8 * nrow(df6))
+
+train_data <- df6[sample_index, ]       # 0.8 for training 
+test_data  <- df6[-sample_index, ]      # 0.2 for testing
+
+#Define X
+train_X <- as.matrix(train_data[, !(names(train_data) %in% "outcome")])
+test_X  <- as.matrix(test_data[, !(names(test_data) %in% "outcome")])
+
+#Define Y
+train_y <- train_data$outcome
+test_y  <- test_data$outcome
+
+# DMatrix 
+dtrain <- xgb.DMatrix(data = train_X, label = train_y)
+dtest  <- xgb.DMatrix(data = test_X, label = test_y)
+
+params <- list(
+  objective = "binary:logistic",
+  eval_metric = "error"
+)
+```
+
+
+
+
+```{r}
+
+# xg_boost() 
+run_xgboost_cv <- function(params, dtrain, dtest, test_y, nfold = 5, max_rounds = 100, early_stopping = 10) {
+  
+  # Step 1: Cross-validation to find best nrounds
+  cv_model <- xgb.cv(
+    params = params,
+    data = dtrain,
+    nrounds = max_rounds,
+    nfold = nfold,
+    early_stopping_rounds = early_stopping,
+    verbose = 0
+  )
+  
+  best_nrounds <- cv_model$best_iteration
+  
+  # Step 2: Train final model
+  start_time <- Sys.time()
+  
+  final_model <- xgboost(
+    params = params,
+    data = dtrain,
+    nrounds = best_nrounds,
+    verbose = 0
+  )
+  
+  # time up  
+  end_time <- Sys.time()
+  fit_time <- end_time - start_time
+  
+  
+
+  # Step 3: Predict on test set
+  test_pred <- predict(final_model, dtest)
+  test_pred_label <- ifelse(test_pred > 0.5, 1, 0)
+  
+  test_error <- mean(test_pred_label != test_y)
+  test_accuracy <- 1 - test_error
+  
+  
+
+  
+  # Step 4: Print results
+  cat("start_time",start_time,"\n")
+  cat("end_time",end_time, "\n")
+  cat("Testing Error Rate:", round(test_error, 4), "\n")
+  cat("Testing Accuracy Rate:", round(test_accuracy, 4), "\n")
+  cat("Time used:", as.numeric(fit_time, units = "secs"), "seconds\n")
+  
+}
+
+# run the code
+result <- run_xgboost_cv(params, dtrain, dtest, test_y)
+
+
+```
+
+
