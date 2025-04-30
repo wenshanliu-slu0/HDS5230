@@ -102,11 +102,11 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 2. When the code run the end, the `gradio` service will be set up and gradio user interface will be launched
 3. You will see a chat window with:
 
-    A textbox to enter your question
-    A “Clear Chat” button to reset the conversation
-    Type your question about breast cancer (e.g., "What are the symptoms of breast cancer?")
-    Press Enter.      
-The chatbot will display the reply in the chat window
+    - A textbox to enter your question
+    - A “Clear Chat” button to reset the conversation
+    - Type your question about breast cancer (e.g., "What are the symptoms of breast cancer?")
+    - Press Enter.      
+    - The chatbot will display the reply in the chat window
 
 Example:
 ![alt text](<./Picture/CleanShot.jpg>)
