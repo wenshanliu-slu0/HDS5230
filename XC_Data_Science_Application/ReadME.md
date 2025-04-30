@@ -77,10 +77,10 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 - **2.1 Answer Generation with GPT-4o-mini**  
   This main agent uses **`gpt-4o-mini`**, accessed via `ChatOpenAI`, to:
 
-- Interpret the question
-- Read retrieved document context
-- Generate natural language answers
-- Optionally reformulate or clarify the question (agent-style reasoning)
+  - Interpret the question
+  - Read retrieved document context
+  - Generate natural language answers
+  - Optionally reformulate or clarify the question (agent-style reasoning)
 
 - **2.2 Answer Generation with PubMed**
   
@@ -88,9 +88,10 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 
 
   This second agent:
-- Queries the top5 relevant literature from **PubMed**
-- Uses GPT-4o-mini to read retrieved abstracts
-- Synthesizes a relevant, concise answer based on the scientific findings
+  
+  - Queries the top5 relevant literature from **PubMed**
+  - Uses GPT-4o-mini to read retrieved abstracts
+  - Synthesizes a relevant, concise answer based on the scientific findings
 
 
 ---
