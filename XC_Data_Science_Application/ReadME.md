@@ -73,7 +73,7 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 
 
 - **2.1 Answer Generation with GPT-4o-mini**  
-  The chatbot uses **`gpt-4o-mini`**, accessed via `ChatOpenAI`, to:
+  This main agent uses **`gpt-4o-mini`**, accessed via `ChatOpenAI`, to:
 
 - Interpret the question
 - Read retrieved document context
@@ -82,14 +82,13 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 
 - **2.2 Answer Generation with PubMed**
   
-If the domain-specific retriever (based on National Cancer website) fails to return relevant results—for example, if the context is missing or similarity scores are too low—the system automatically invokes a second agent powered by the **LangChain PubMed Retriever**.
+  If the main agent retriever (based on National Cancer website) fails to return relevant results—for example, if the context is missing or similarity scores are too low—the system automatically invokes a second agent powered by the **LangChain PubMed Retriever**.
 
 This agent:
 - Queries the top5 relevant literature from **PubMed**
 - Uses GPT-4o-mini to read retrieved abstracts
 - Synthesizes a relevant, concise answer based on the scientific findings
 
-If the internal breast cancer document retriever (domain RAG) fails to find sufficient information based on the user query, the system automatically triggers the PubMed Retriever tool.
 
 ---
 
