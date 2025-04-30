@@ -57,7 +57,7 @@ The system uses `WebBaseLoader` to crawl and load these HTML documents, skipping
 
 - When a user asks a question, the system compares it to the vectorized text from cancer.gov PDFs and selects the most semantically relevant passage.
 - The most semantically relevant content is retrieved and passed to `gpt-4o-mini`, which then generates a natural language answer grounded in the selected content.
-- If the internal knowledge base returns no relevant results, the system optionally queries **PubMed** for external biomedical literature (see [PubMed Integration](#-pubmed-integration-for-biomedical-retrieval)).
+- If the internal knowledge base returns no relevant results, the system optionally queries **PubMed** for external biomedical literature.
 
 
 ---
