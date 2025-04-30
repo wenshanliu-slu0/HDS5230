@@ -42,18 +42,23 @@ By providing immediate, accurate responses drawn from reliable sources like the 
 
 **Source:**
 
-- All documents are retrieved from the official [National Cancer Institute XML sitemap](https://www.cancer.gov/sitemaps/pageinstructions.xml), which links to multiple PDF documents related to breast cancer prevention, screening, treatment, and survivorship.
+- All content is sourced from the official [National Cancer Institute XML sitemap](https://www.cancer.gov/sitemaps/pageinstructions.xml), which contains hundreds of links to educational pages about breast cancer. While the sitemap includes both PDF and HTML resources, the application primarily retrieves **HTML pages**, which are more structured and easier to parse for QA purposes.
+
+The system uses `WebBaseLoader` to crawl and load these HTML documents, skipping over non-text resources such as videos or PDFs.
 
 **Content:**
 
-- The application extracts text content from PDF files found in the sitemap.
-- These documents serve as the domain-specific knowledge base for the QA system.
-- Each passage is embedded using sentence-transformer models for similarity search.
+- Extracted HTML content includes information on breast cancer prevention, diagnosis, screening, treatment, etc.
+- Each document is split into smaller chunks for embedding and retrieval.
+- These chunks form the internal **domain-specific knowledge base** used to answer user questions.
+
 
 **Usage:**
 
 - When a user asks a question, the system compares it to the vectorized text from cancer.gov PDFs and selects the most semantically relevant passage.
-- A transformer-based QA model then extracts a concise answer from that passage.
+- The most semantically relevant content is retrieved and passed to `gpt-4o-mini`, which then generates a natural language answer grounded in the selected content.
+- If the internal knowledge base returns no relevant results, the system optionally queries **PubMed** for external biomedical literature (see [PubMed Integration](#-pubmed-integration-for-biomedical-retrieval)).
+
 
 ---
 
@@ -79,7 +84,7 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 If the domain-specific retriever (based on National Cancer website) fails to return relevant results—for example, if the context is missing or similarity scores are too low—the system automatically invokes a second agent powered by the **LangChain PubMed Retriever**.
 
 This agent:
-- Queries the top5 relivence literature from **PubMed**
+- Queries the top5 relevant literature from **PubMed**
 - Uses GPT-4o-mini to read retrieved abstracts
 - Synthesizes a relevant, concise answer based on the scientific findings
 
