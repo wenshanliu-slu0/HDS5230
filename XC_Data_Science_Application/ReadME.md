@@ -66,12 +66,8 @@ This application leverages a **NLP pipeline** that integrates three key componen
 - **1. Semantic Embedding & Retrieval**  
   The system uses `sentence-transformers` (`all-MiniLM-L6-v2`) to embed both user queries and text passages from cancer.gov PDFs. In addition, `cosine similarity` is used to retrieve the most semantically relevant context.
 
-- **2. Extractive QA with Hugging Face Transformers**  
-  Once the most relevant passage is found, the system uses `distilbert-base-uncased-distilled-squad`—a fast and efficient question-answering model from Hugging Face—to pick out the **exact part of the text** that answers the user’s question.  
-  This method works especially well when the answer is written directly or very closelys in the source passage, giving users quick and accurate responses.
 
-
-- **3. LLM Reasoning with OpenAI GPT-4o-mini**  
+- **2. LLM Reasoning with OpenAI GPT-4o-mini**  
   For complex reasoning or rephrased answers, the system uses OpenAI’s `gpt-4o-mini` model (via `ChatOpenAI`) with temperature set to `0.0`, ensuring factual consistency and minimal hallucination. This enables natural, human-like response generation while staying grounded in the retrieved medical content. In addition, to enhance the chatbot's capability beyond exact span extraction, this application integrates OpenAI’s `gpt-4o-mini` model using the `ChatOpenAI` interface (via LangChain).
 
 
