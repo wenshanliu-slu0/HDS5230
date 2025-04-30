@@ -60,17 +60,22 @@ By providing immediate, accurate responses drawn from reliable sources like the 
 ### Data Science & Model Architecture
 
 
-This application leverages a **NLP pipeline** that integrates three key components—**semantic retrieval**, **extractive question answering**, and **generative LLM reasoning**—to accurately answer breast cancer–related questions in real time.
+This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4o-mini**, which handles all stages of question interpretation, document reading, and answer generation.
 
 
-- **1. Semantic Embedding & Retrieval**  
-  The system uses `sentence-transformers` (`all-MiniLM-L6-v2`) to embed both user queries and text passages from cancer.gov PDFs. In addition, `cosine similarity` is used to retrieve the most semantically relevant context.
+- **1. Semantic Retrieval with OpenAI Embeddings**  
+  To find relevant context for a user question, the system uses **`OpenAIEmbeddings()`** (via `langchain_openai`) to convert both the question and document chunks into dense vector representations. 
 
 
-- **2. LLM Reasoning with OpenAI GPT-4o-mini**  
-  For complex reasoning or rephrased answers, the system uses OpenAI’s `gpt-4o-mini` model (via `ChatOpenAI`) with temperature set to `0.0`, ensuring factual consistency and minimal hallucination. This enables natural, human-like response generation while staying grounded in the retrieved medical content. In addition, to enhance the chatbot's capability beyond exact span extraction, this application integrates OpenAI’s `gpt-4o-mini` model using the `ChatOpenAI` interface (via LangChain).
+- **2. Answer Generation with GPT-4o-mini**  
+  The chatbot uses **`gpt-4o-mini`**, accessed via `ChatOpenAI`, to:
 
-
+- Interpret the question
+- Read retrieved document context
+- Generate natural language answers
+- Optionally reformulate or clarify the question (agent-style reasoning)
+  
+This design results in a fully OpenAI-powered QA pipeline, with no Hugging Face models or sentence-transformers involved in embedding or answering.
 
 ---
 
@@ -78,7 +83,13 @@ This application leverages a **NLP pipeline** that integrates three key componen
 
 1. Run in Jupyter Notebook `breast_cancer_QA_chatbot_demo.ipynb`
 2. When the code run the end, the `gradio` service will be set up and gradio user interface will be launched
-3. Use the web interface, and type in the quastion, and press `enter`
+3. You will see a chat window with:
+
+    A textbox to enter your question
+    A “Clear Chat” button to reset the conversation
+    Type your question about breast cancer (e.g., "What are the symptoms of breast cancer?")
+    Press Enter.      
+The chatbot will display the reply in the chat window
 
 Example:
 ![alt text](<./Picture/CleanShot.jpg>)
