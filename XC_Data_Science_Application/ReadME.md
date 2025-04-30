@@ -105,7 +105,7 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
     - A textbox to enter your question
     - A “Clear Chat” button to reset the conversation
     - Type your question about breast cancer (e.g., "What are the symptoms of breast cancer?")
-    - Press Enter.      
+    - Press `Enter`.      
     - The chatbot will display the reply in the chat window
 
 Example:
