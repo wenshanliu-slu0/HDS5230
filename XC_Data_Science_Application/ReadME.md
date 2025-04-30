@@ -4,6 +4,8 @@ Authors:
 
 Date: May 1, 2025
 
+---
+
 ### Objective
 
 This project demonstrates a simple **Question Answering (QA) chatbot** for breast cancer-related content using **transformer-based language models**. The chatbot is capable of understanding user queries and extracting relevant answers from a predefined breast cancer corpus. This showcases the potential application of **Natural Language Processing (NLP)** in supporting:
@@ -84,7 +86,8 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
   
   If the main agent retriever (based on National Cancer website) fails to return relevant results—for example, if the context is missing or similarity scores are too low—the system automatically invokes a second agent powered by the **LangChain PubMed Retriever**.
 
-This agent:
+
+  This second agent:
 - Queries the top5 relevant literature from **PubMed**
 - Uses GPT-4o-mini to read retrieved abstracts
 - Synthesizes a relevant, concise answer based on the scientific findings
