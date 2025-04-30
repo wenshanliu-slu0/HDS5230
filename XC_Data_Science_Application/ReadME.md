@@ -90,6 +90,6 @@ Example:
 
 ---
 
-### Demo Video:
+### Demo Video
 
 https:
