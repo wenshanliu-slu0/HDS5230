@@ -80,7 +80,8 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 - Generate natural language answers
 - Optionally reformulate or clarify the question (agent-style reasoning)
 
-- **2.2Answer Generation with PubMed** 
+- **2.2 Answer Generation with PubMed**
+  
 If the domain-specific retriever (based on National Cancer website) fails to return relevant results—for example, if the context is missing or similarity scores are too low—the system automatically invokes a second agent powered by the **LangChain PubMed Retriever**.
 
 This agent:
