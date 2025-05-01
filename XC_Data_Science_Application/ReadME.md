@@ -8,7 +8,7 @@ Date: May 1, 2025
 
 ### Objective
 
-This project demonstrates a simple **Question Answering (QA) chatbot** for breast cancer-related content using **transformer-based language models**. The chatbot is capable of understanding user queries and extracting relevant answers from a predefined breast cancer corpus. This showcases the potential application of **Natural Language Processing (NLP)** in supporting:
+This project demonstrates a unique **Question Answering (QA) chatbot** for breast cancer-related content using **transformer-based language models**. The chatbot is capable of understanding user queries and extracting relevant answers from a predefined breast cancer corpus. This showcases the potential application of a **Retrieval Augmented Generation (RAG)** along with **Natural Language Processing (NLP)** in supporting:
 
 - Medical education  
 - Patient-centered health information  
