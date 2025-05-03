@@ -97,9 +97,12 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 ---
 
 ### How to run this Application?
+Before run the application, you need to download `breast_cancer_QA_chatbot_demo.ipynb` and `constant.py` and then upload to your own `Google Drive` folder. 
+Please make sure both of them are in the same folder.
 
-1. Run in Jupyter Notebook `breast_cancer_QA_chatbot_demo.ipynb`
-2. When the code run the end, the `gradio` service will be set up and gradio user interface will be launched
+0. Type in your ChatGPT API Key informatation in `constant.py` file.
+1. Run in Jupyter Notebook `breast_cancer_QA_chatbot_demo.ipynb` by using `Google Colab`.
+2. When the code run the end, the `gradio` service will be set up and gradio user interface will be launched.
 3. You will see a chat window with:
 
     - A textbox to enter your question
