@@ -3,9 +3,10 @@ Authors:
 
 Date: May 1, 2025
 
-#### Put directory structure here!
+#### directory structure here
 
 <pre>```
+│── README.md  
 ├── Config
 │ └── constant.py
 ├── Data
