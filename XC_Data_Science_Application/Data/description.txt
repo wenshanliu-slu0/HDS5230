@@ -1,0 +1,11 @@
+Dataset Info
+Source:
+
+All content is sourced from the official National Cancer Institute XML sitemap, which contains hundreds of links to educational pages about breast cancer. While the sitemap includes both PDF and HTML resources, the application primarily retrieves HTML pages, which are more structured and easier to parse for QA purposes.
+The system uses WebBaseLoader to crawl and load these HTML documents, skipping over non-text resources such as videos or PDFs.
+
+Content:
+
+Extracted HTML content includes information on breast cancer prevention, diagnosis, screening, treatment, etc.
+Each document is split into smaller chunks for embedding and retrieval.
+These chunks form the internal domain-specific knowledge base used to answer user questions.
