@@ -1,6 +1,15 @@
 # Put directory structure here!
 
 
+Directories:
+./ - This is the top-level directory for the project. 
+./Config - constant.py
+./data - 
+./doc - ReadME.md
+./src - 
+
+
+
 #### ====== Below will be placed in Doc folder! ======
 # Breast Cancer QA Chatbot 
 
