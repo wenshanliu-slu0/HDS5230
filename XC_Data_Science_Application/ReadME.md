@@ -1,7 +1,7 @@
-# Put sample directory structure here!
+# Put directory structure here!
 
 
-# ====== Below will be placed in Doc folder!
+#### ====== Below will be placed in Doc folder!
 # Breast Cancer QA Chatbot 
 
 Authors: 
