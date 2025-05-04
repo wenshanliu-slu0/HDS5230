@@ -97,7 +97,7 @@ This application uses a unified LLM-driven pipeline centered on **OpenAI's GPT-4
 ---
 
 ### How to run this Application?
-Before run the application, download `breast_cancer_QA_chatbot_demo.ipynb` and `constant.py` and then upload to your own `Google Drive` folder. 
+Before run the application, download `breast_cancer_QA_chatbot_demo.ipynb` (in Src fodler) and `constant.py` (in Config folder) and then upload to your own `Google Drive` folder. 
 Please make sure both of them are in the same folder.
 
 0. Enter your ChatGPT API Key informatation in `constant.py` file.
