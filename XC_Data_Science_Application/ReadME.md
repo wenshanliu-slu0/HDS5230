@@ -1,13 +1,5 @@
 # Put directory structure here!
 
-
-Directories:  </br>
-./ - This is the top-level directory for the project.   </br>
-./Config - constant.py </br>
-./data -      </br>
-./doc - ReadME.md  </br>
-./src -   </br>
-
 <pre>```
 ├── Config
 │ └── constant.py
