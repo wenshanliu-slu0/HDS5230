@@ -3,10 +3,10 @@ Authors:
 
 Date: May 1, 2025
 
-#### directory structure here
+#### directory structure 
 
 <pre>```
-│── README.md  
+  
 ├── Config
 │ └── constant.py
 ├── Data
@@ -16,3 +16,4 @@ Date: May 1, 2025
 ├── Src
   └── breast_cancer_QA_chatbot_demo.ipynb
 ``` </pre>
+
