@@ -8,7 +8,15 @@ Directories:  </br>
 ./doc - ReadME.md  </br>
 ./src -   </br>
 
-
+<pre>```
+├── Config
+│ └── constant.py
+├── data
+├── doc
+│ └── ReadME.md
+├── src
+└── README.md
+``` </pre>
 
 #### ====== Below will be placed in Doc folder! ======
 # Breast Cancer QA Chatbot 
