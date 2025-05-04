@@ -4,10 +4,11 @@
 ├── Config
 │ └── constant.py
 ├── Data
+│ └── description.txt
 ├── Doc
 │ └── ReadME.md
 ├── Src
-  └── Main_code.ipynb
+  └── breast_cancer_QA_chatbot_demo.ipynb
 ``` </pre>
 
 #### ====== Below will be placed in Doc folder! ======
