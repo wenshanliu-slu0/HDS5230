@@ -11,11 +11,11 @@ Directories:  </br>
 <pre>```
 ├── Config
 │ └── constant.py
-├── data
-├── doc
+├── Data
+├── Doc
 │ └── ReadME.md
-├── src
-└── README.md
+├── Src
+  └── Main_code.ipynb
 ``` </pre>
 
 #### ====== Below will be placed in Doc folder! ======
