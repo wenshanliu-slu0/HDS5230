@@ -112,7 +112,7 @@ Please make sure both of them are in the same folder.
     - The chatbot will display the reply in the chat window
 
 Example:
-![alt text](<./Picture/CleanShot.jpg>)
+![alt text](<../Picture/CleanShot.jpg>)
 
 
 ---
