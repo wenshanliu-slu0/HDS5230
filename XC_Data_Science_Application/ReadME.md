@@ -5,7 +5,7 @@ Date: May 1, 2025
 
 #### directory structure 
 
-<pre>```
+<pre>
   
 ├── Config
 │ └── constant.py
@@ -15,5 +15,5 @@ Date: May 1, 2025
 │ └── ReadME.md
 ├── Src
   └── breast_cancer_QA_chatbot_demo.ipynb
-``` </pre>
+ </pre>
 
